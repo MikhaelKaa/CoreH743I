@@ -24,10 +24,17 @@ BUILD_DIR = build
 C_SOURCES += src/main.c
 C_SOURCES += src/syscalls.c
 C_SOURCES += src/system_init.c
+# C_SOURCES += src/stm32h7xx_mco.c
+C_SOURCES += dev/dev_mco/dev_mco1.c
+C_SOURCES += dev/dev_mco/dev_mco2.c
+
 
 # C includes
 C_INCLUDES += -ICMSIS
 C_INCLUDES += -Isrc
+C_INCLUDES += -Idev
+C_INCLUDES += -Idev/dev_mco
+
 
 # ASM sources
 ASM_SOURCES = src/startup_stm32h743xx.s

@@ -1,0 +1,1 @@
+MCO device for stm32h743iit6 (and other compatable chip)
