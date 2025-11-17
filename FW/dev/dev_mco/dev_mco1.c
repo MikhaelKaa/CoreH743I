@@ -92,11 +92,15 @@ static int mco1_open(void) {
     // Alternate function mode
     GPIOA->MODER &= ~(0x3U << GPIO_MODER_MODE8_Pos);
     GPIOA->MODER |= (0x2U << GPIO_MODER_MODE8_Pos);
-    
+
+    // AF0 for MCO1
+    GPIOA->AFR[1] &= ~(0xFU << GPIO_AFRH_AFSEL8_Pos);
+    GPIOA->AFR[1] |= (0x0U << GPIO_AFRH_AFSEL8_Pos);
+
     // Apply configuration
     uint32_t reg_value = source_to_reg(mco1_config.source) | prescaler_to_reg(mco1_config.prescaler);
     RCC->CFGR = (RCC->CFGR & ~(RCC_CFGR_MCO1 | RCC_CFGR_MCO1PRE)) | reg_value;
-    
+
     return 0;
 }
 

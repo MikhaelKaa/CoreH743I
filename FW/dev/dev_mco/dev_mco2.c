@@ -95,7 +95,7 @@ static int mco2_open(void) {
     GPIOC->MODER &= ~(0x3U << GPIO_MODER_MODE9_Pos);
     GPIOC->MODER |= (0x2U << GPIO_MODER_MODE9_Pos);
     
-    // AF0 for MCO2 (critical!)
+    // AF0 for MCO2
     GPIOC->AFR[1] &= ~(0xFU << GPIO_AFRH_AFSEL9_Pos);
     GPIOC->AFR[1] |= (0x0U << GPIO_AFRH_AFSEL9_Pos);
     
