@@ -24,17 +24,29 @@ BUILD_DIR = build
 C_SOURCES += src/main.c
 C_SOURCES += src/syscalls.c
 C_SOURCES += src/system_init.c
-# C_SOURCES += src/stm32h7xx_mco.c
+# dev
 C_SOURCES += dev/dev_mco/dev_mco1.c
 C_SOURCES += dev/dev_mco/dev_mco2.c
+C_SOURCES += dev/dev_uart1/dev_uart1.c
+# app
+C_SOURCES += app/cli/microrl.c
+C_SOURCES += app/cli/ucmd.c
+C_SOURCES += app/cli/cmd_list.c
+C_SOURCES += app/mem/memory_man.c
+C_SOURCES += app/uping/uart_ping.c
 
 
 # C includes
 C_INCLUDES += -ICMSIS
 C_INCLUDES += -Isrc
+# dev
 C_INCLUDES += -Idev
 C_INCLUDES += -Idev/dev_mco
-
+C_INCLUDES += -Idev/dev_uart1
+# app
+C_INCLUDES += -Iapp/cli
+C_INCLUDES += -Iapp/mem
+C_INCLUDES += -Iapp/uping
 
 # ASM sources
 ASM_SOURCES = src/startup_stm32h743xx.s

@@ -1,6 +1,6 @@
 /* SPDX-License-Identifier: MIT */
 /*
- * dev_list.h - Unified device interface abstraction
+ * uart_ping.h - uart test utility
  *
  * Copyright (c) 2025 Michael Kaa
  *
@@ -23,11 +23,22 @@
  * SOFTWARE.
  */
 
-#ifndef _DEV_LIST_H
-#define _DEV_LIST_H
+#ifndef _UART_PING_H
+#define _UART_PING_H
+
+#include <stddef.h>
+#include <stdint.h>
+#include <errno.h>
 
 #include "dev_interface.h"
 
-#include "dev_uart1.h"
+/**
+ * TODO: ...
+ */
+int ucmd_uping(int argc, char **argv);
 
-#endif /* _DEV_LIST_H */
+extern interface_t* dev_uart_ping;
+
+#endif /* _UART_PING_H */
+
+

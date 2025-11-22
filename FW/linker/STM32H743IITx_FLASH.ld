@@ -72,6 +72,31 @@ FLASH (rx)      : ORIGIN = 0x8000000, LENGTH = 2048K
 /* Define output sections */
 SECTIONS
 {
+  .buffers(NOLOAD) : {
+    . = ALIGN(4);
+    *(.ITCMRAM_buf*)
+  } > ITCMRAM
+
+  .buffers(NOLOAD) : {
+    . = ALIGN(4);
+    *(.DTCMRAM_buf*)
+  } > DTCMRAM
+
+  .buffers(NOLOAD) : {
+    . = ALIGN(4);
+    *(.RAM_D1_buf*)
+  } > RAM_D1
+  
+  .bufferss(NOLOAD) : {
+    . = ALIGN(4);
+    *(.RAM_D2_buf*)
+  } > RAM_D2
+
+  .bufferss(NOLOAD) : {
+    . = ALIGN(4);
+    *(.RAM_D3_buf*)
+  } > RAM_D3
+
   /* The startup code goes first into FLASH */
   .isr_vector :
   {

@@ -226,7 +226,10 @@ typedef enum
   * @}
   */
 
-
+// RAM defines
+#define RAM_D1 __attribute__ ((section(".RAM_D1_buf"), used)) 
+#define RAM_D2 __attribute__ ((section(".RAM_D2_buf"), used)) 
+#define RAM_D3 __attribute__ ((section(".RAM_D3_buf"), used)) 
 
 
 #include "system_stm32h7xx.h"

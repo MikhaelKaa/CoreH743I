@@ -31,7 +31,7 @@
 #include <sys/times.h>
 #include <unistd.h>
 
-// #include "dev_uart1.h"
+#include "dev_uart1.h"
 
 char*  __env[1] = {0};
 char** environ  = __env;
@@ -42,7 +42,7 @@ int _write(int file, char* ptr, int len)
     (void) len;
     if (file == STDOUT_FILENO || file == STDERR_FILENO)
     {
-        
+        dev_uart1_get()->write(ptr, len);
         return -1;
     }
     errno = EIO;
@@ -53,7 +53,7 @@ int _write(int file, char* ptr, int len)
 int __io_getchar(void)
 {
     uint8_t ch = 0;
-    // dev_uart1.read(&ch, 1);
+    dev_uart1_get()->read(&ch, 1);
     return ch;
 }
 
