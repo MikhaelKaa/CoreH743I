@@ -22,6 +22,7 @@ BUILD_DIR = build
 ######################################
 # C sources
 C_SOURCES += src/main.c
+C_SOURCES += src/fmc.c
 C_SOURCES += src/syscalls.c
 C_SOURCES += src/system_init.c
 # dev

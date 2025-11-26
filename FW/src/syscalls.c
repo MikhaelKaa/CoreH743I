@@ -42,7 +42,7 @@ int _write(int file, char* ptr, int len)
     (void) len;
     if (file == STDOUT_FILENO || file == STDERR_FILENO)
     {
-        dev_uart1_get()->write(ptr, len);
+        dev_uart1_get()->write(ptr, (size_t)len);
         return -1;
     }
     errno = EIO;
