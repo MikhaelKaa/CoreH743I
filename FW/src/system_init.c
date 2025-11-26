@@ -4,9 +4,6 @@
 
 uint32_t SystemCoreClock = 0;
 
-void enable_mco1(void);
-void enable_mco2(void);
-
 void SystemInit(void)
 {
     // Set flash latency to 4 wait states
@@ -83,10 +80,10 @@ void SystemInit(void)
     // dev_mco1->ioctrl(MCO1_SET_CONFIG, &mco1_setings);
     // dev_mco1->open();
 
+    
     // enable mco2
     dev_mco2_config_t mco2_settings = {.source =  mco2_source_pllclk, .prescaler =  mco2_prescaler_15};
-    interface_t* dev_mco2 = dev_mco2_get();
-    dev_mco2->ioctrl(MCO2_SET_CONFIG, &mco2_settings);
-    dev_mco2->open();
+    dev_mco2_get()->ioctrl(MCO2_SET_CONFIG, &mco2_settings);
+    dev_mco2_get()->open();
     
 }
