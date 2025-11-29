@@ -33,8 +33,6 @@
 
 /**
  * struct interface - Unified device interface
- * @open: Initialize and open device
- * @close: Close and deinitialize device
  * @read: Read data from device
  * @write: Write data to device
  * @ioctrl: Device control and configuration
@@ -44,8 +42,6 @@
  */
 typedef struct interface
 {
-    int (*open)(void);
-    int (*close)(void);
     int (*read)(void* buf, size_t len);
     int (*write)(const void* buf, size_t len);
     int (*ioctrl)(int cmd, void* arg);
@@ -57,6 +53,8 @@ typedef struct interface
 #define INTERFACE_RESET      0x1002 /* Reset device */
 #define INTERFACE_SET_CONFIG 0x1003 /* Set device configuration */
 #define INTERFACE_GET_CONFIG 0x1004 /* Get device configuration */
+#define INTERFACE_INIT       0x1005 /* Initialize device */
+#define INTERFACE_DEINIT     0x1006 /* Deinitialize device */
 
 /* Device-specific command space */
 #define INTERFACE_CMD_DEVICE 0x8000 /* Base for device-specific commands */

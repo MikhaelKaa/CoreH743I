@@ -83,7 +83,7 @@ void SystemInit(void)
     
     // enable mco2
     dev_mco2_config_t mco2_settings = {.source =  mco2_source_pllclk, .prescaler =  mco2_prescaler_15};
+    dev_mco2_get()->ioctrl(INTERFACE_INIT, &mco2_settings);
     dev_mco2_get()->ioctrl(MCO2_SET_CONFIG, &mco2_settings);
-    dev_mco2_get()->open();
     
 }

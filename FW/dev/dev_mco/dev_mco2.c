@@ -78,8 +78,8 @@ static uint32_t prescaler_to_reg(dev_mco2_prescaler_t prescaler) {
     }
 }
 
-// Open MCO2 (interface implementation)
-static int mco2_open(void) {
+// Initialize MCO2
+static int mco2_init(void) {
     // Enable GPIOC clock
     RCC->AHB4ENR |= RCC_AHB4ENR_GPIOCEN;
     
@@ -106,8 +106,9 @@ static int mco2_open(void) {
     return 0;
 }
 
-// Close MCO2 (interface implementation)
-static int mco2_close(void) {
+// Deinitialize MCO2
+static int mco2_deinit(void) {
+
     // Disable MCO2 output
     RCC->CFGR &= ~(RCC_CFGR_MCO2 | RCC_CFGR_MCO2PRE);
     
@@ -116,6 +117,10 @@ static int mco2_close(void) {
     GPIOC->OSPEEDR &= ~(0x3U << GPIO_OSPEEDR_OSPEED9_Pos);
     GPIOC->AFR[1] &= ~(0xFU << GPIO_AFRH_AFSEL9_Pos);
     
+    // Disable GPIOC clock if no longer needed
+    // Note: Be careful if other peripherals use GPIOC
+    // RCC->AHB4ENR &= ~RCC_AHB4ENR_GPIOCEN;
+
     return 0;
 }
 
@@ -146,10 +151,9 @@ static int mco2_set_config(dev_mco2_config_t* config) {
     mco2_config.source = config->source;
     mco2_config.prescaler = config->prescaler;
 
-    // Update hardware if device is open
     uint32_t reg_value = source_to_reg(mco2_config.source) | (prescaler_to_reg(mco2_config.prescaler) << 7U);
     RCC->CFGR = (RCC->CFGR & ~(RCC_CFGR_MCO2 | RCC_CFGR_MCO2PRE)) | reg_value;
-    
+        
     return 0;
 }
 
@@ -166,6 +170,12 @@ static int mco2_get_config(dev_mco2_config_t *config) {
 // IO Control for MCO2
 static int mco2_ioctrl(int cmd, void *arg) {
     switch (cmd) {
+        case INTERFACE_INIT:
+            return mco2_init();
+            
+        case INTERFACE_DEINIT:
+            return mco2_deinit();
+            
         case MCO2_SET_CONFIG:
             if (arg == NULL) return -EINVAL;
             return mco2_set_config((dev_mco2_config_t *)arg);
@@ -181,8 +191,6 @@ static int mco2_ioctrl(int cmd, void *arg) {
 
 // MCO2 device instance
 static const interface_t dev_mco2 = {
-    .open = mco2_open,
-    .close = mco2_close,
     .read = mco2_read,
     .write = mco2_write,
     .ioctrl = mco2_ioctrl

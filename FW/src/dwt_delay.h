@@ -12,7 +12,7 @@
 #define SystemCoreClock (480000000U) 
 #endif
 
-// Init DWT
+// DWT (Data Watchpoint and Trace) delay utilities for STM32H743
 static inline void dwt_delay_init(void)
 {
     // Enable Trace Port and DWT access

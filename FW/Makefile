@@ -29,6 +29,8 @@ C_SOURCES += src/system_init.c
 C_SOURCES += dev/dev_mco/dev_mco1.c
 C_SOURCES += dev/dev_mco/dev_mco2.c
 C_SOURCES += dev/dev_uart1/dev_uart1.c
+C_SOURCES += dev/dev_mem/dev_mem.c
+
 # app
 C_SOURCES += app/cli/microrl.c
 C_SOURCES += app/cli/ucmd.c
@@ -44,6 +46,8 @@ C_INCLUDES += -Isrc
 C_INCLUDES += -Idev
 C_INCLUDES += -Idev/dev_mco
 C_INCLUDES += -Idev/dev_uart1
+C_INCLUDES += -Idev/dev_mem
+
 # app
 C_INCLUDES += -Iapp/cli
 C_INCLUDES += -Iapp/mem

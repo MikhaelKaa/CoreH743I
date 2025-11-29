@@ -109,7 +109,7 @@ void ucmd_default_init(void) {
   microrl_set_sigint_callback(&default_rl, default_sigint);
   // microrl_insert_char(prl, '\r');
   microrl_insert_char(&default_rl, '\n');
-  microrl_insert_char(&default_rl, '\n');  
+  // microrl_insert_char(&default_rl, '\n');  
 }
 
 void ucmd_default_proc(void) {

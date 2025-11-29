@@ -76,8 +76,9 @@ static uint32_t prescaler_to_reg(dev_mco1_prescaler_t prescaler) {
     }
 }
 
-// Open MCO1 (interface implementation)
-static int mco1_open(void) {
+// Initialize MCO1
+static int mco1_init(void) {
+
     // Enable GPIOA clock
     RCC->AHB4ENR |= RCC_AHB4ENR_GPIOAEN;
     
@@ -104,14 +105,19 @@ static int mco1_open(void) {
     return 0;
 }
 
-// Close MCO1 (interface implementation)
-static int mco1_close(void) {
+// Deinitialize MCO1
+static int mco1_deinit(void) {
+
     // Disable MCO1 output
     RCC->CFGR &= ~(RCC_CFGR_MCO1 | RCC_CFGR_MCO1PRE);
     
     // Reset GPIO configuration
     GPIOA->MODER &= ~(0x3U << GPIO_MODER_MODE8_Pos);
     GPIOA->OSPEEDR &= ~(0x3U << GPIO_OSPEEDR_OSPEED8_Pos);
+    
+    // Disable GPIOA clock if no longer needed
+    // Note: Be careful if other peripherals use GPIOA
+    // RCC->AHB4ENR &= ~RCC_AHB4ENR_GPIOAEN;
     
     return 0;
 }
@@ -143,9 +149,9 @@ static int mco1_set_config(dev_mco1_config_t* config) {
     mco1_config.source = config->source;
     mco1_config.prescaler = config->prescaler;
 
-    // Update hardware if device is open
     uint32_t reg_value = source_to_reg(mco1_config.source) | prescaler_to_reg(mco1_config.prescaler);
     RCC->CFGR = (RCC->CFGR & ~(RCC_CFGR_MCO1 | RCC_CFGR_MCO1PRE)) | reg_value;
+
     
     return 0;
 }
@@ -163,6 +169,12 @@ static int mco1_get_config(dev_mco1_config_t *config) {
 // IO Control for MCO1
 static int mco1_ioctrl(int cmd, void *arg) {
     switch (cmd) {
+        case INTERFACE_INIT:
+            return mco1_init();
+            
+        case INTERFACE_DEINIT:
+            return mco1_deinit();
+            
         case MCO1_SET_CONFIG:
             if (arg == NULL) return -EINVAL;
             return mco1_set_config((dev_mco1_config_t *)arg);
@@ -178,8 +190,6 @@ static int mco1_ioctrl(int cmd, void *arg) {
 
 // MCO1 device instance
 static const interface_t dev_mco1 = {
-    .open = mco1_open,
-    .close = mco1_close,
     .read = mco1_read,
     .write = mco1_write,
     .ioctrl = mco1_ioctrl

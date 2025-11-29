@@ -29,5 +29,7 @@
 #include "dev_interface.h"
 
 #include "dev_uart1.h"
+#include "dev_mem.h"
+
 
 #endif /* _DEV_LIST_H */

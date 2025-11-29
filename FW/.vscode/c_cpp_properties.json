@@ -10,11 +10,28 @@
                 "${workspaceFolder}/CMSIS"
             ],
             "defines": [],
-            // "compilerPath": "/usr/bin/gcc",
-            "cStandard": "c17",
-            "cppStandard": "gnu++17",
-            "intelliSenseMode": "linux-gcc-x64"
+            "compilerPath": "C:/arm_tool/gcc/bin",
+            "cStandard": "c99",
+            "cppStandard": "gnu++11",
+            "intelliSenseMode": "linux-gcc-arm"
+        },
+        {
+            "name": "Win",
+            "includePath": [
+                "C:/arm_tool/gcc/arm-none-eabi/include",
+                "${workspaceFolder}/**",
+                "${workspaceFolder}/dev/dev_uart1",
+                "${workspaceFolder}/dev",
+                "${workspaceFolder}/app/cli",
+                "${workspaceFolder}/CMSIS"
+            ],
+            "defines": [],
+            "compilerPath": "C:/arm_tool/gcc/bin/arm-none-eabi-gcc.exe",
+            "cStandard": "c99",
+            "cppStandard": "gnu++11",
+            "intelliSenseMode": "${default}"
         }
     ],
+
     "version": 4
 }

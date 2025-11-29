@@ -27,19 +27,6 @@ static int uart_init(void);
 static int uart_deinit(void);
 static int uart_set_baudrate(uint32_t baudrate);
 
-// Open UART (interface implementation)
-static int uart_open(void) {
-    if (!uart_initialized) {
-        return uart_init();
-    }
-    return 0;
-}
-
-// Close UART (interface implementation)  
-static int uart_close(void) {
-    return uart_deinit();
-}
-
 // Write data to UART (interface implementation)
 static int uart_write(const void *buf, size_t count) {
     if (buf == NULL || count == 0) {
@@ -374,10 +361,8 @@ static int uart_ioctrl(int cmd, void *arg) {
 
 // UART device instance (static - hidden inside module)
 static const interface_t dev_uart1 = {
-    .open = uart_open,
-    .close = uart_close, 
-    .read = uart_read,
-    .write = uart_write,
+    .read   = uart_read,
+    .write  = uart_write,
     .ioctrl = uart_ioctrl
 };
 

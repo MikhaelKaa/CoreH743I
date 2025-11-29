@@ -2,31 +2,37 @@
 #include <stdio.h>
 #include <fcntl.h>
 #include <devctl.h>
+
 #include "dev_list.h"
 #include "ucmd.h"
-
 #include "dwt_delay.h"
-
-#define SDRAM_BANK_ADDR                 (0xD0000000U)
- volatile uint32_t* test = (uint32_t*) SDRAM_BANK_ADDR;
-extern  void FMC_Init(void);
 
 int main(void)
 {
     // SCB_EnableICache();
     // SCB_EnableDCache();
 
+    dwt_delay_init();
+
     const interface_t* uart1 = dev_uart1_get();
     uart1->ioctrl(UART_INIT, NULL);
     setvbuf(stdin, NULL, _IONBF, 0);  // Отключаем буферизацию stdin
     
-    printf("Its start!!!\r\n");
-    
+    printf("System start\r\n");
+
+    dev_memory_print_info();
+
+    dev_memory_t* mem_info = NULL;
+    dev_memory_get()->ioctrl(MEMORY_GET_INFO, &mem_info);
+    size_t pointer = mem_info->regions[6].start+8;
+    dev_memory_get()->ioctrl(MEMORY_SET_ADDRESS, &pointer);
+    uint8_t test_data[300] = {0};
+    for(size_t  i = 0; i < 257; i++){
+        test_data[i] = (uint8_t)i;
+    }
+    dev_memory_get()->write(test_data, 0xff);
+  
     ucmd_default_init();
-
-    FMC_Init();
-
-    dwt_delay_init();
 
     while (1)
     {

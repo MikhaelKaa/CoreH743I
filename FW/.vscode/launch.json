@@ -8,7 +8,7 @@
 			"svdFile": "./openocd/STM32H7x3.svd",
 			"request": "launch",
 			"type": "cortex-debug",
-			"gdbPath": "gdb-multiarch", // !!! comment this on windows !!!
+			// "gdbPath": "gdb-multiarch", // !!! comment this on windows !!!
 			"servertype": "openocd",
 			"interface": "swd",
 			//"adapter speed": "500",
