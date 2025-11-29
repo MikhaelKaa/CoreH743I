@@ -6,6 +6,9 @@
 #include "dev_list.h"
 #include "ucmd.h"
 #include "dwt_delay.h"
+#include "memory_man.h"
+
+static const char test_array[] = {"lorem ipsum test arrray data with some random data kdjvnkdfjsbvnldksjbnkdgjbn"};
 
 int main(void)
 {
@@ -19,7 +22,7 @@ int main(void)
     setvbuf(stdin, NULL, _IONBF, 0);  // Отключаем буферизацию stdin
     
     printf("System start\r\n");
-
+    printf("test_array adr: %08lx\r\n", (uint32_t)test_array);
     dev_memory_print_info();
 
     #ifdef TEST_WRITE_SDRAM
@@ -34,16 +37,22 @@ int main(void)
     dev_memory_get()->write(test_data, 0xff);
     #endif // TEST_WRITE_SDRAM
 
-     #ifdef TEST_WRITE_FLASH
+    // #define TEST_WRITE_FLASH
+    #ifdef TEST_WRITE_FLASH
     const interface_t* mem = dev_memory_get();
     // Установить адрес во Flash и записать данные
-    uint32_t address = (0x08000000U + 256U*1024U) + 256;
+    uint32_t address = (0x08000000U + 256U*1024U);
     // uint32_t address = 0x08010000;
-    uint32_t data[4] = {0x12345678, 0xABCDEF00, 0x11223344, 0x55667788};
+    uint32_t data[4] = {0xbebebebe, 0xABCDEF00, 0x11223344, 0x55667788};
     mem->ioctrl(MEMORY_SET_ADDRESS, &address);
-    mem->write(data, sizeof(data)); // Автоматически: прочитает сектор, обновит данные, сотрет сектор, запишет обратно
-    // mem dump 08040000 100
+    int mem_result = mem->write(data, sizeof(data)); // Автоматически: прочитает сектор, обновит данные, сотрет сектор, запишет обратно
+    printf("mem->write ret %d\r\n", mem_result);
     #endif // TEST_WRITE_FLASH
+
+    // mem dump 08040000 100
+    // mem write 08040007 57
+    // mem cpy 08040000 0800874c 64
+    mem_set_interface((interface_t *)dev_memory_get());
 
     ucmd_default_init();
 
