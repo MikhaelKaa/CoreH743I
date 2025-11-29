@@ -22,6 +22,7 @@ int main(void)
 
     dev_memory_print_info();
 
+    #ifdef TEST_WRITE_SDRAM
     dev_memory_t* mem_info = NULL;
     dev_memory_get()->ioctrl(MEMORY_GET_INFO, &mem_info);
     size_t pointer = mem_info->regions[6].start+8;
@@ -31,18 +32,18 @@ int main(void)
         test_data[i] = (uint8_t)i;
     }
     dev_memory_get()->write(test_data, 0xff);
-  
-    // const interface_t* mem = dev_memory_get();
+    #endif // TEST_WRITE_SDRAM
 
-    // // Установить адрес во Flash и записать данные
-    // uint32_t address = (0x08000000U + 256U*1024U) + 256;
-    // // uint32_t address = 0x08010000;
-    // uint32_t data[4] = {0x12345678, 0xABCDEF00, 0x11223344, 0x55667788};
-
-    // mem->ioctrl(MEMORY_SET_ADDRESS, &address);
-    // mem->write(data, sizeof(data)); // Автоматически: прочитает сектор, обновит данные, сотрет сектор, запишет обратно
-
+     #ifdef TEST_WRITE_FLASH
+    const interface_t* mem = dev_memory_get();
+    // Установить адрес во Flash и записать данные
+    uint32_t address = (0x08000000U + 256U*1024U) + 256;
+    // uint32_t address = 0x08010000;
+    uint32_t data[4] = {0x12345678, 0xABCDEF00, 0x11223344, 0x55667788};
+    mem->ioctrl(MEMORY_SET_ADDRESS, &address);
+    mem->write(data, sizeof(data)); // Автоматически: прочитает сектор, обновит данные, сотрет сектор, запишет обратно
     // mem dump 08040000 100
+    #endif // TEST_WRITE_FLASH
 
     ucmd_default_init();
 
