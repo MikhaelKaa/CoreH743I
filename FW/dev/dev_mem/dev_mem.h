@@ -46,9 +46,15 @@ typedef struct {
 } dev_memory_t;
 
 /* Memory-specific ioctrl commands */
-#define MEMORY_GET_INFO       (INTERFACE_CMD_DEVICE + 0)  /* Get memory device info */
-#define MEMORY_SET_ADDRESS    (INTERFACE_CMD_DEVICE + 1)  /* Set current memory address */
-#define MEMORY_GET_ADDRESS    (INTERFACE_CMD_DEVICE + 2)  /* Get current memory address */
+// Memory-specific ioctrl commands
+#define MEMORY_GET_INFO          (INTERFACE_CMD_DEVICE + 0)  // Get memory device info
+#define MEMORY_SET_ADDRESS       (INTERFACE_CMD_DEVICE + 1)  // Set current memory address
+#define MEMORY_GET_ADDRESS       (INTERFACE_CMD_DEVICE + 2)  // Get current memory address
+// #define MEMORY_FLASH_UNLOCK      (INTERFACE_CMD_DEVICE + 3)  // Unlock Flash for writing
+// #define MEMORY_FLASH_LOCK        (INTERFACE_CMD_DEVICE + 4)  // Lock Flash
+// #define MEMORY_FLASH_ERASE_SECTOR (INTERFACE_CMD_DEVICE + 5) // Erase Flash sector
+// #define MEMORY_FLASH_ERASE_MASS  (INTERFACE_CMD_DEVICE + 6)  // Mass erase Flash
+// #define MEMORY_FLASH_WRITE       (INTERFACE_CMD_DEVICE + 7)  // Write to Flash with automatic erase
 
 /* Global memory device instance accessor */
 const interface_t* dev_memory_get(void);

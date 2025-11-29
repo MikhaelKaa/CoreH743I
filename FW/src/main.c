@@ -32,6 +32,18 @@ int main(void)
     }
     dev_memory_get()->write(test_data, 0xff);
   
+    // const interface_t* mem = dev_memory_get();
+
+    // // Установить адрес во Flash и записать данные
+    // uint32_t address = (0x08000000U + 256U*1024U) + 256;
+    // // uint32_t address = 0x08010000;
+    // uint32_t data[4] = {0x12345678, 0xABCDEF00, 0x11223344, 0x55667788};
+
+    // mem->ioctrl(MEMORY_SET_ADDRESS, &address);
+    // mem->write(data, sizeof(data)); // Автоматически: прочитает сектор, обновит данные, сотрет сектор, запишет обратно
+
+    // mem dump 08040000 100
+
     ucmd_default_init();
 
     while (1)
