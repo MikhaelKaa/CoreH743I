@@ -192,7 +192,7 @@ static int mco1_ioctrl(int cmd, void *arg) {
 static const interface_t dev_mco1 = {
     .read = mco1_read,
     .write = mco1_write,
-    .ioctrl = mco1_ioctrl
+    .ioctl = mco1_ioctrl
 };
 
 // MCO1 device instance accessor

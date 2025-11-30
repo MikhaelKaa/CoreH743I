@@ -367,7 +367,7 @@ static int memory_ioctrl(int cmd, void* arg) {
 static const interface_t dev_memory = {
     .read = memory_read,
     .write = memory_write,
-    .ioctrl = memory_ioctrl
+    .ioctl = memory_ioctrl
 };
 
 // Memory device instance accessor

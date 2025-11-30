@@ -18,7 +18,7 @@ int main(void)
     dwt_delay_init();
 
     const interface_t* uart1 = dev_uart1_get();
-    uart1->ioctrl(UART_INIT, NULL);
+    uart1->ioctl(UART_INIT, NULL);
     setvbuf(stdin, NULL, _IONBF, 0);  // Отключаем буферизацию stdin
     
     printf("System start\r\n");
@@ -27,9 +27,9 @@ int main(void)
 
     #ifdef TEST_WRITE_SDRAM
     dev_memory_t* mem_info = NULL;
-    dev_memory_get()->ioctrl(MEMORY_GET_INFO, &mem_info);
+    dev_memory_get()->ioctl(MEMORY_GET_INFO, &mem_info);
     size_t pointer = mem_info->regions[6].start+8;
-    dev_memory_get()->ioctrl(MEMORY_SET_ADDRESS, &pointer);
+    dev_memory_get()->ioctl(MEMORY_SET_ADDRESS, &pointer);
     uint8_t test_data[300] = {0};
     for(size_t  i = 0; i < 257; i++){
         test_data[i] = (uint8_t)i;
@@ -44,14 +44,14 @@ int main(void)
     uint32_t address = (0x08000000U + 256U*1024U);
     // uint32_t address = 0x08010000;
     uint32_t data[4] = {0xbebebebe, 0xABCDEF00, 0x11223344, 0x55667788};
-    mem->ioctrl(MEMORY_SET_ADDRESS, &address);
+    mem->ioctl(MEMORY_SET_ADDRESS, &address);
     int mem_result = mem->write(data, sizeof(data)); // Автоматически: прочитает сектор, обновит данные, сотрет сектор, запишет обратно
     printf("mem->write ret %d\r\n", mem_result);
     #endif // TEST_WRITE_FLASH
 
     // mem dump 08040000 100
     // mem write 08040007 57
-    // mem cpy 08040000 0800874c 64
+    // mem cpy 08040000 0800877c 64
     mem_set_interface((interface_t *)dev_memory_get());
 
     ucmd_default_init();

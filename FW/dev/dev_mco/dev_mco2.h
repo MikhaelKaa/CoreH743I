@@ -29,7 +29,7 @@
 #include "dev_interface.h"
 #include <stdint.h>
 
-// MCO2-specific ioctrl commands
+// MCO2-specific ioctl commands
 #define MCO2_SET_CONFIG       (INTERFACE_CMD_DEVICE + 0)
 #define MCO2_GET_CONFIG       (INTERFACE_CMD_DEVICE + 1)
 

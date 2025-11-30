@@ -139,7 +139,7 @@ static int mem_dump(uintptr_t addr, uint32_t len) {
         uint32_t chunk = (len - total_read) > sizeof(buffer) ? sizeof(buffer) : (len - total_read);
         
         // Set address for reading
-        int ret = mem_interface->ioctrl(MEMORY_SET_ADDRESS, &current_addr);
+        int ret = mem_interface->ioctl(MEMORY_SET_ADDRESS, &current_addr);
         if (ret != 0) {
             printf("Failed to set address: %d" ENDL, ret);
             return ret;
@@ -274,7 +274,7 @@ static int mem_copy(uintptr_t dst, uintptr_t src, uint32_t len) {
         
         // Set source address and read
         uintptr_t src_addr = src + total_copied;
-        ret = mem_interface->ioctrl(MEMORY_SET_ADDRESS, &src_addr);
+        ret = mem_interface->ioctl(MEMORY_SET_ADDRESS, &src_addr);
         if (ret != 0) {
             printf("Failed to set source address: %d" ENDL, ret);
             return ret;
@@ -289,7 +289,7 @@ static int mem_copy(uintptr_t dst, uintptr_t src, uint32_t len) {
 
         // Set destination address and write
         uintptr_t dst_addr = dst + total_copied;
-        ret = mem_interface->ioctrl(MEMORY_SET_ADDRESS, &dst_addr);
+        ret = mem_interface->ioctl(MEMORY_SET_ADDRESS, &dst_addr);
         if (ret != 0) {
             printf("Failed to set destination address: %d" ENDL, ret);
             return ret;
@@ -310,7 +310,7 @@ static int mem_copy(uintptr_t dst, uintptr_t src, uint32_t len) {
 static int mem_read_byte(uintptr_t addr, uint8_t* value) {
     int ret;
     
-    ret = mem_interface->ioctrl(MEMORY_SET_ADDRESS, &addr);
+    ret = mem_interface->ioctl(MEMORY_SET_ADDRESS, &addr);
     if (ret != 0) {
         return ret;
     }
@@ -328,7 +328,7 @@ static int mem_read_byte(uintptr_t addr, uint8_t* value) {
 static int mem_write_byte(uintptr_t addr, uint8_t value) {
     int ret;
     
-    ret = mem_interface->ioctrl(MEMORY_SET_ADDRESS, &addr);
+    ret = mem_interface->ioctl(MEMORY_SET_ADDRESS, &addr);
     if (ret != 0) {
         return ret;
     }

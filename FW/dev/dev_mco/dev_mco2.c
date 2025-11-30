@@ -193,7 +193,7 @@ static int mco2_ioctrl(int cmd, void *arg) {
 static const interface_t dev_mco2 = {
     .read = mco2_read,
     .write = mco2_write,
-    .ioctrl = mco2_ioctrl
+    .ioctl = mco2_ioctrl
 };
 
 // MCO2 device instance accessor

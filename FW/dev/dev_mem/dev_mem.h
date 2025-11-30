@@ -45,8 +45,8 @@ typedef struct {
     mem_region_t* regions;      /* Pointer to array of memory regions */
 } dev_memory_t;
 
-/* Memory-specific ioctrl commands */
-// Memory-specific ioctrl commands
+/* Memory-specific ioctl commands */
+// Memory-specific ioctl commands
 #define MEMORY_GET_INFO          (INTERFACE_CMD_DEVICE + 0)  // Get memory device info
 #define MEMORY_SET_ADDRESS       (INTERFACE_CMD_DEVICE + 1)  // Set current memory address
 #define MEMORY_GET_ADDRESS       (INTERFACE_CMD_DEVICE + 2)  // Get current memory address
@@ -67,7 +67,7 @@ static inline void dev_memory_print_info(void) {
     }
     
     dev_memory_t* mem_info = NULL;
-    int result = mem_dev->ioctrl(MEMORY_GET_INFO, &mem_info);
+    int result = mem_dev->ioctl(MEMORY_GET_INFO, &mem_info);
     if (result != 0 || mem_info == NULL) {
         printf("Failed to get memory info: %d\r\n", result);
         return;

@@ -363,7 +363,7 @@ static int uart_ioctrl(int cmd, void *arg) {
 static const interface_t dev_uart1 = {
     .read   = uart_read,
     .write  = uart_write,
-    .ioctrl = uart_ioctrl
+    .ioctl = uart_ioctrl
 };
 
 // UART device instance accessor

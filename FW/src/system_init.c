@@ -77,13 +77,13 @@ void SystemInit(void)
     // enable mco1
     // dev_mco1_config_t mco1_setings = {.source = mco1_source_hse, .prescaler = mco1_prescaler_4};
     // interface_t* dev_mco1 = dev_mco1_get();
-    // dev_mco1->ioctrl(MCO1_SET_CONFIG, &mco1_setings);
+    // dev_mco1->ioctl(MCO1_SET_CONFIG, &mco1_setings);
     // dev_mco1->open();
 
     
     // enable mco2
     dev_mco2_config_t mco2_settings = {.source =  mco2_source_pllclk, .prescaler =  mco2_prescaler_15};
-    dev_mco2_get()->ioctrl(INTERFACE_INIT, &mco2_settings);
-    dev_mco2_get()->ioctrl(MCO2_SET_CONFIG, &mco2_settings);
+    dev_mco2_get()->ioctl(INTERFACE_INIT, &mco2_settings);
+    dev_mco2_get()->ioctl(MCO2_SET_CONFIG, &mco2_settings);
     
 }

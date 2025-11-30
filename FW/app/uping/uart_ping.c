@@ -99,7 +99,7 @@ int main(int argc, char* argv[])
     printf("Send completed" ENDL);
 
     // Check for received data
-    dev_uart_ping->ioctrl(INTERFACE_CMD_DEVICE, &available);
+    dev_uart_ping->ioctl(INTERFACE_CMD_DEVICE, &available);
     
     if (available > 0) {
         printf("Received %d bytes:" ENDL, available);

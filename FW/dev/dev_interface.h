@@ -35,7 +35,7 @@
  * struct interface - Unified device interface
  * @read: Read data from device
  * @write: Write data to device
- * @ioctrl: Device control and configuration
+ * @ioctl: Device control and configuration
  *
  * Generic interface for all device types in the system.
  * Functions should return 0 on success or negative errno on error.
@@ -44,10 +44,10 @@ typedef struct interface
 {
     int (*read)(void* buf, size_t len);
     int (*write)(const void* buf, size_t len);
-    int (*ioctrl)(int cmd, void* arg);
+    int (*ioctl)(int cmd, void* arg);
 } interface_t;
 
-/* Common ioctrl commands */
+/* Common ioctl commands */
 #define INTERFACE_GET_INFO   0x1000 /* Get device info */
 #define INTERFACE_GET_STATUS 0x1001 /* Get device status */
 #define INTERFACE_RESET      0x1002 /* Reset device */

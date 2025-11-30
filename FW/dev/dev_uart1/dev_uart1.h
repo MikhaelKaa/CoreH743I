@@ -38,7 +38,7 @@
 // Default baudrate
 #define UART_DEFAULT_BAUDRATE 115200
 
-// UART-specific ioctrl commands
+// UART-specific ioctl commands
 #define UART_INIT           (INTERFACE_CMD_DEVICE + 0)
 #define UART_DEINIT         (INTERFACE_CMD_DEVICE + 1)
 #define UART_GET_AVAILABLE  (INTERFACE_CMD_DEVICE + 2)
