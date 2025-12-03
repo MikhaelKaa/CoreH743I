@@ -93,8 +93,14 @@ void default_sigint(void) {
   printf("default_sigint\r\n");
 }
 
-static volatile uint8_t ucmd_default_rx;
-static microrl_t default_rl;
+
+// RAM defines
+#ifndef RAM_D1
+#define RAM_D1 __attribute__ ((section(".RAM_D1_buf"), used)) 
+#endif // RAM_D1
+
+RAM_D1 static volatile uint8_t ucmd_default_rx;
+RAM_D1 static microrl_t default_rl;
 
 void ucmd_default_init(void) {
   ucmd_default_rx = 0;

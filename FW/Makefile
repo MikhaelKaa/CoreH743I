@@ -37,6 +37,7 @@ C_SOURCES += app/cli/ucmd.c
 C_SOURCES += app/cli/cmd_list.c
 C_SOURCES += app/mem/memory_man.c
 C_SOURCES += app/uping/uart_ping.c
+C_SOURCES += app/svcall_test/svc_test.c
 
 
 # C includes
@@ -49,9 +50,11 @@ C_INCLUDES += -Idev/dev_uart1
 C_INCLUDES += -Idev/dev_mem
 
 # app
+C_INCLUDES += -Iapp/dwt_delay
 C_INCLUDES += -Iapp/cli
 C_INCLUDES += -Iapp/mem
 C_INCLUDES += -Iapp/uping
+C_INCLUDES += -Iapp/svcall_test
 
 # ASM sources
 ASM_SOURCES = src/startup_stm32h743xx.s

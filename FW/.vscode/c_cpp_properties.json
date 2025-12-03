@@ -23,7 +23,8 @@
                 "${workspaceFolder}/dev/dev_uart1",
                 "${workspaceFolder}/dev",
                 "${workspaceFolder}/app/cli",
-                "${workspaceFolder}/CMSIS"
+                "${workspaceFolder}/CMSIS",
+                "${workspaceFolder}/app/dwt_delay"
             ],
             "defines": [
                 "BAREMETAL"
@@ -34,6 +35,5 @@
             "intelliSenseMode": "${default}"
         }
     ],
-
     "version": 4
 }
