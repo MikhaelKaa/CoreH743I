@@ -31,6 +31,7 @@
 typedef struct {
     uint32_t svc_num;   // Извлеченный номер SVC 
     uint32_t args[4];   // Аргументы
+    uint32_t svc_ret;   // return value
 } svc_debug_t;
 
 volatile svc_debug_t svc_debug_info = {0};
@@ -38,7 +39,7 @@ volatile svc_debug_t svc_debug_info = {0};
 void print_svc_debug(void);
 
 // Номер svc должен быть константой известной на этапе компиляции
-#define SVC_NUM (42)
+#define SVC_NUM (85)
 
 // Макрос для вызова SVC с номером вызова
 #define SVC_CALL(num, arg0, arg1, arg2, arg3) \
@@ -83,7 +84,10 @@ int main(int argc, char* argv[])
 
     // svc_num пока не используем никак - хардкодим 85, оно должно быть константой времени компиляции
     SVC_CALL(SVC_NUM, args[0], args[1], args[2], args[3]);
-    
+    __asm volatile(
+        "ldr r1, =svc_debug_info\n"
+        "str r0, [r1, #20]\n"  // svc ret value
+    );
     print_svc_debug(); 
 
     return 0;
@@ -96,49 +100,123 @@ void print_svc_debug(void)
     printf("arg[1]: %lu" ENDL, svc_debug_info.args[1]);
     printf("arg[2]: %lu" ENDL, svc_debug_info.args[2]);
     printf("arg[3]: %lu" ENDL, svc_debug_info.args[3]);
+
+    printf("svc call return : %lu" ENDL, svc_debug_info.svc_ret);
 }
 
-void SVC_Handler(void)
+
+// +------------+
+// |   xPSR     |  ← [SP + 28] 
+// +------------+
+// |   PC       |  ← [SP + 24] (адрес после SVC)
+// +------------+
+// |   LR       |  ← [SP + 20] (EXC_RETURN)
+// +------------+
+// |   R12      |  ← [SP + 16] 
+// +------------+
+// |   R3       |  ← [SP + 12] (arg3)
+// +------------+
+// |   R2       |  ← [SP + 8]  (arg2)
+// +------------+
+// |   R1       |  ← [SP + 4]  (arg1)
+// +------------+
+// |   R0       |  ← [SP + 0]  (arg0/результат)
+// +------------+
+
+
+__attribute__((naked)) void SVC_Handler(void)
 {
     __asm volatile(
-
-        "push {r4}\n"
-
-        // Сохраняем аргументы
-        "ldr r12, =svc_debug_info\n"
-        "str r0, [r12, #4]\n"   // r0
-        "str r1, [r12, #8]\n"   // r1
-        "str r2, [r12, #12]\n"  // r2
-        "str r3, [r12, #16]\n"  // r3
-
         // MSP or PSP?
         "tst lr, #4\n"
         "ite eq\n"
-        "mrseq r4, msp\n"    // MSP
-        "mrsne r4, psp\n"    // PSP 
-    
+        "mrseq r1, msp\n"    // MSP
+        "mrsne r1, psp\n"    // PSP
+
+        "push {r1, lr}\n"
+
         // Получаем PC из стека
-        "ldr r12, [r4, #28]\n"   // PC находится по смещению 24 байта (6 слов), плюс 4 байта для r4 (7 word)
+        "ldr r2, [r1, #24]\n"
 
         // Получаем адрес инструкции SVC
-        "subs r12, #2\n"         // PC указывает на следующую инструкцию после SVC
+        "subs r2, #2\n"         // PC указывает на следующую инструкцию после SVC
         
         // Читаем инструкцию SVC (16 бит в Thumb)
-        "ldrh r4, [r12]\n"
+        "ldrh r0, [r2]\n"
         
         // Извлекаем номер SVC 
-        "and r4, #0xff\n"
+        "and r0, #0xff\n"
         
-        // Сохраняем номер SVC 
-        "ldr r12, =svc_debug_info\n"
-        "str r4, [r12, #0]\n"   // Извлеченный номер SVC
-
         // <---
+        "bl svc_proc\n"
+
+        "pop {r1, lr}\n"
         
-        // Возвращаемся из обработчика 
-        "pop {r4}\n"
+        "str r0, [r1, #0]\n"
+        
         "bx lr\n"
     );
 }
+
+uint32_t svc_proc(uint32_t svc, uint32_t* arg) {
+    svc_debug_info.svc_num = svc;
+    svc_debug_info.args[0] = arg[0];
+    svc_debug_info.args[1] = arg[1];
+    svc_debug_info.args[2] = arg[2];
+    svc_debug_info.args[3] = arg[3];
+
+    return svc;
+}
+
+
+// макет кода проверяющего были ли использованы регистры FPU и сохраняющий их
+// скорее всего нерабочий
+// __attribute__((naked)) void SVC_Handler(void)
+// {
+//     __asm volatile(
+//         "tst lr, #4                      \n"
+//         "ite eq                          \n"
+//         "mrseq r0, msp                   \n"
+//         "mrsne r0, psp                   \n"
+        
+//         // Сохраняем регистры (базовый набор для всех Cortex-M)
+//         "push {r4-r11, lr}              \n"
+        
+//     #if defined(CORTEX_M4F) || defined(CORTEX_M7)
+//         // Проверяем, использовался ли FPU
+//         "tst lr, #0x10                   \n"
+//         "bne 1f                          \n"
+//         // Сохраняем FPU регистры
+//         #ifdef CORTEX_M7
+//             // Для M7 с double precision
+//             "vstmdb r0!, {d0-d15}        \n"
+//         #else
+//             // Для M4 с single precision
+//             "vstmdb r0!, {s0-s31}        \n"
+//         #endif
+//     "1:                                 \n"
+//     #endif
+        
+//         // Общая часть обработки
+//         "mov r4, r0                      \n" // Сохраняем SP
+        
+//         // ... ваша логика обработки SVC ...
+        
+//     #if defined(CORTEX_M4F) || defined(CORTEX_M7)
+//         // Восстанавливаем FPU если нужно
+//         "tst lr, #0x10                   \n"
+//         "bne 2f                          \n"
+//         #ifdef CORTEX_M7
+//             "vldmia r4!, {d0-d15}        \n"
+//         #else
+//             "vldmia r4!, {s0-s31}        \n"
+//         #endif
+//     "2:                                 \n"
+//     #endif
+        
+//         "pop {r4-r11, pc}                \n"
+//     );
+// }
+
 
 #undef ENDL

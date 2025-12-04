@@ -62,6 +62,8 @@ int main(void)
     // mem write 08040007 57
     // mem cpy 08040000 0800877c 64
     mem_set_interface((interface_t *)dev_memory_get());
+    
+    printf("CPUID: 0x%08lx\r\n", SCB->CPUID);
 
     ucmd_default_init();
 
