@@ -101,6 +101,9 @@ void print_svc_debug(void)
 void SVC_Handler(void)
 {
     __asm volatile(
+
+        "push {r4}\n"
+
         // Сохраняем аргументы
         "ldr r12, =svc_debug_info\n"
         "str r0, [r12, #4]\n"   // r0
@@ -111,26 +114,29 @@ void SVC_Handler(void)
         // MSP or PSP?
         "tst lr, #4\n"
         "ite eq\n"
-        "mrseq r0, msp\n"    // MSP
-        "mrsne r0, psp\n"    // PSP 
+        "mrseq r4, msp\n"    // MSP
+        "mrsne r4, psp\n"    // PSP 
     
         // Получаем PC из стека
-        "ldr r12, [r0, #24]\n"   // PC находится по смещению 24 байта (6 слов)
+        "ldr r12, [r4, #28]\n"   // PC находится по смещению 24 байта (6 слов), плюс 4 байта для r4 (7 word)
 
         // Получаем адрес инструкции SVC
         "subs r12, #2\n"         // PC указывает на следующую инструкцию после SVC
         
         // Читаем инструкцию SVC (16 бит в Thumb)
-        "ldrh r0, [r12]\n"
+        "ldrh r4, [r12]\n"
         
-        /* Извлекаем номер SVC */
-        "and r0, #0xff\n"
+        // Извлекаем номер SVC 
+        "and r4, #0xff\n"
         
-        /* Сохраняем номер SVC */
+        // Сохраняем номер SVC 
         "ldr r12, =svc_debug_info\n"
-        "str r0, [r12, #0]\n"   /* Извлеченный номер SVC */
+        "str r4, [r12, #0]\n"   // Извлеченный номер SVC
 
-        /* Возвращаемся из исключения */
+        // <---
+        
+        // Возвращаемся из обработчика 
+        "pop {r4}\n"
         "bx lr\n"
     );
 }
