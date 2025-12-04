@@ -134,7 +134,6 @@ CFLAGS += -MMD -MP -MF"$(@:%.o=%.d)"
 # LDFLAGS
 #######################################
 # link script
-		   
 LDSCRIPT = linker/STM32H743IITx_FLASH.ld
 
 # libraries
@@ -190,6 +189,14 @@ $(BUILD_DIR):
 clean:
 	-rm -fR $(BUILD_DIR)
   
+
+#######################################
+# disassembly
+#######################################
+disasm: $(BUILD_DIR)/$(TARGET).elf
+	$(PREFIX)objdump -d -S $< > $(BUILD_DIR)/$(TARGET).disasm
+	@echo "Disassembly generated: $(BUILD_DIR)/$(TARGET).disasm"
+
 #######################################
 # dependencies
 #######################################
@@ -201,5 +208,7 @@ flash_dap:
 
 flash_st:
 	openocd -f ./openocd/stlink.cfg -f ./openocd/stm32h7x.cfg -c init -c "reset halt" -c "flash write_image erase build/firmware.hex" -c "reset run" -c "exit"
+
+.PHONY: all clean flash_dap flash_st disasm
 
 # *** EOF ***
