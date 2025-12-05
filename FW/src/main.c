@@ -7,7 +7,7 @@
 #include "ucmd.h"
 #include "dwt_delay.h"
 #include "memory_man.h"
-
+#include "vfs.h"
 
 void mpu_init(void);
 
@@ -63,6 +63,8 @@ int main(void)
     // mem cpy 08040000 0800877c 64
     mem_set_interface((interface_t *)dev_memory_get());
     
+    vfs_bootstrap();
+
     printf("CPUID: 0x%08lx\r\n", SCB->CPUID);
 
     ucmd_default_init();

@@ -7,6 +7,8 @@
 #include "uart_ping.h"
 #include "svc_test.h"
 
+#include "vfs.h"
+
 int ucmd_mcu_reset(int argc, char** argv)
 {
     (void)argc;
@@ -42,10 +44,16 @@ command_t cmd_list[] = {
       .fn   = ucmd_uping,
     },
 
-        {
+    {
       .cmd  = "svc",
       .help = "SVCall demo utility",
       .fn   = ucmd_tscv,
+    },
+
+    {
+      .cmd  = "vfs",
+      .help = "virtual file system util",
+      .fn   = cmd_test_vfs,
     },
 
 

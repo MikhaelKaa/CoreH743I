@@ -21,10 +21,17 @@ BUILD_DIR = build
 # source
 ######################################
 # C sources
+# system 
 C_SOURCES += src/main.c
 C_SOURCES += src/fmc.c
 C_SOURCES += src/syscalls.c
 C_SOURCES += src/system_init.c
+
+C_SOURCES += src/devfs.c
+C_SOURCES += src/vfs_bootstrap.c
+C_SOURCES += src/vfs.c
+C_SOURCES += src/ucmd_vfs.c
+
 # dev
 C_SOURCES += dev/dev_mco/dev_mco1.c
 C_SOURCES += dev/dev_mco/dev_mco2.c
