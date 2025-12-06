@@ -7,7 +7,8 @@
 #include "ucmd.h"
 #include "dwt_delay.h"
 #include "memory_man.h"
-#include "vfs.h"
+#include <fcntl.h>
+#include "vfs_api.h"
 
 void mpu_init(void);
 

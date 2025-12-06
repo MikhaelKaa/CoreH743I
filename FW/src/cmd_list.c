@@ -7,7 +7,7 @@
 #include "uart_ping.h"
 #include "svc_test.h"
 
-#include "vfs.h"
+#include "vfs_ucmd.h"
 
 int ucmd_mcu_reset(int argc, char** argv)
 {

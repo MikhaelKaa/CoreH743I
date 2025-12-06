@@ -24,7 +24,8 @@
                 "${workspaceFolder}/dev",
                 "${workspaceFolder}/app/cli",
                 "${workspaceFolder}/CMSIS",
-                "${workspaceFolder}/app/dwt_delay"
+                "${workspaceFolder}/app/dwt_delay",
+                "${workspaceFolder}/src/vfs"
             ],
             "defines": [
                 "BAREMETAL"

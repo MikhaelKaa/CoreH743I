@@ -26,18 +26,19 @@ C_SOURCES += src/main.c
 C_SOURCES += src/fmc.c
 C_SOURCES += src/syscalls.c
 C_SOURCES += src/system_init.c
-
-C_SOURCES += src/devfs.c
-C_SOURCES += src/vfs_bootstrap.c
-C_SOURCES += src/vfs.c
-C_SOURCES += src/ucmd_vfs.c
-
+# vfs
+C_SOURCES += src/vfs/vfs_api.c
+C_SOURCES += src/vfs/vfs_core.c
+C_SOURCES += src/vfs/vfs_devfs.c
+C_SOURCES += src/vfs/vfs_ramfs.c
+C_SOURCES += src/vfs/vfs_path.c
+C_SOURCES += src/vfs/vfs_ucmd.c
+C_SOURCES += src/vfs/vfs_bootstrap.c
 # dev
 C_SOURCES += dev/dev_mco/dev_mco1.c
 C_SOURCES += dev/dev_mco/dev_mco2.c
 C_SOURCES += dev/dev_uart1/dev_uart1.c
 C_SOURCES += dev/dev_mem/dev_mem.c
-
 # app
 C_SOURCES += app/cli/microrl.c
 C_SOURCES += app/cli/ucmd.c
@@ -50,12 +51,12 @@ C_SOURCES += app/svcall_test/svc_test.c
 # C includes
 C_INCLUDES += -ICMSIS
 C_INCLUDES += -Isrc
+C_INCLUDES += -Isrc/vfs
 # dev
 C_INCLUDES += -Idev
 C_INCLUDES += -Idev/dev_mco
 C_INCLUDES += -Idev/dev_uart1
 C_INCLUDES += -Idev/dev_mem
-
 # app
 C_INCLUDES += -Iapp/dwt_delay
 C_INCLUDES += -Iapp/cli
@@ -75,6 +76,8 @@ AS_DEFS =
 # C defines
 C_DEFS += -DSTM32H743xx
 C_DEFS += -DBAREMETAL
+C_DEFS += -DVFS_DEBUG
+
 
 #######################################
 # binaries
